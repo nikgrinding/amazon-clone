@@ -1,4 +1,4 @@
-import { calculateCartQuantity } from '../../data/cart.js';
+import { cart } from "../../data/cart-class.js";
 
 export function renderCheckoutHeader() {
 	const checkoutHTML = `
@@ -17,7 +17,7 @@ export function renderCheckoutHeader() {
                 Checkout (<a
                     class="return-to-home-link js-return-to-home-link"
                     href="amazon.html"
-                >${calculateCartQuantity()}</a
+                >${cart.calculateCartQuantity()}</a
                 >)
             </div>
 
@@ -26,5 +26,5 @@ export function renderCheckoutHeader() {
             </div>
         </div>
     `;
-	document.querySelector('.js-checkout-header').innerHTML = checkoutHTML;
+	document.querySelector(".js-checkout-header").innerHTML = checkoutHTML;
 }

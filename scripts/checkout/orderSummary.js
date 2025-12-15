@@ -1,16 +1,16 @@
-import { cart } from '../../data/cart-class.js';
-import { getProduct } from '../../data/products.js';
-import { formatCurrency } from '../utils/money.js';
+import { cart } from "../../data/cart-class.js";
+import { getProduct } from "../../data/products.js";
+import { formatCurrency } from "../utils/money.js";
 import {
 	calculateDeliveryDate,
 	deliveryOptions,
 	getDeliveryOption,
-} from '../../data/deliveryOptions.js';
-import { renderPaymentSummary } from './paymentSummary.js';
-import { renderCheckoutHeader } from './checkoutHeader.js';
+} from "../../data/deliveryOptions.js";
+import { renderPaymentSummary } from "./paymentSummary.js";
+import { renderCheckoutHeader } from "./checkoutHeader.js";
 
 export function renderOrderSummary() {
-	let cartSummaryHTML = '';
+	let cartSummaryHTML = "";
 
 	cart.cartItems.forEach((cartItem) => {
 		const productId = cartItem.productId;
@@ -87,7 +87,7 @@ export function renderOrderSummary() {
 	});
 
 	function deliveryOptionsHTML(matchingProduct, cartItem) {
-		let html = '';
+		let html = "";
 		deliveryOptions.forEach((deliveryOption) => {
 			const dateString = calculateDeliveryDate(deliveryOption);
 			const { priceCents } = deliveryOption;
@@ -100,7 +100,7 @@ export function renderOrderSummary() {
 			}" data-delivery-option-id="${deliveryOption.id}">
                 <input
                     type="radio"
-                    ${isChecked ? 'checked' : ''}
+                    ${isChecked ? "checked" : ""}
                     class="delivery-option-input js-delivery-option-input-${
 						matchingProduct.id
 					}-${deliveryOption.id}"
@@ -113,8 +113,8 @@ export function renderOrderSummary() {
                     <div class="delivery-option-price">
                         ${
 							priceCents
-								? '$' + formatCurrency(priceCents) + ' -'
-								: 'FREE'
+								? "$" + formatCurrency(priceCents) + " -"
+								: "FREE"
 						} Shipping
                     </div>
                 </div>
@@ -124,10 +124,10 @@ export function renderOrderSummary() {
 		return html;
 	}
 
-	document.querySelector('.js-order-summary').innerHTML = cartSummaryHTML;
+	document.querySelector(".js-order-summary").innerHTML = cartSummaryHTML;
 
-	document.querySelectorAll('.js-delete-quantity-link').forEach((link) => {
-		link.addEventListener('click', () => {
+	document.querySelectorAll(".js-delete-quantity-link").forEach((link) => {
+		link.addEventListener("click", () => {
 			const productId = link.dataset.productId;
 			cart.removeFromCart(productId);
 			renderCheckoutHeader();
@@ -136,12 +136,12 @@ export function renderOrderSummary() {
 		});
 	});
 
-	document.querySelectorAll('.js-update-quantity-link').forEach((link) => {
-		link.addEventListener('click', () => {
+	document.querySelectorAll(".js-update-quantity-link").forEach((link) => {
+		link.addEventListener("click", () => {
 			const productId = link.dataset.productId;
 			document
 				.querySelector(`.js-cart-item-container-${productId}`)
-				.classList.add('is-editing-quantity');
+				.classList.add("is-editing-quantity");
 		});
 	});
 
@@ -149,8 +149,8 @@ export function renderOrderSummary() {
 		const quantity = Number(
 			document.querySelector(`.js-quantity-input-${productId}`).value
 		);
-		if (quantity < 0 || quantity >= 1000) {
-			alert('Quantity must be at least 0 and less than 1000');
+		if (quantity <= 0 || quantity >= 1000) {
+			alert("Quantity must be at least 1 and less than 1000");
 			return;
 		}
 		cart.updateQuantity(productId, quantity);
@@ -159,25 +159,25 @@ export function renderOrderSummary() {
 		renderPaymentSummary();
 	}
 
-	document.querySelectorAll('.js-save-quantity-link').forEach((link) => {
+	document.querySelectorAll(".js-save-quantity-link").forEach((link) => {
 		const productId = link.dataset.productId;
 		const quantityInput = document.querySelector(
 			`.js-quantity-input-${productId}`
 		);
-		link.addEventListener('click', () => {
+		link.addEventListener("click", () => {
 			handleUpdateQuantity(productId);
 			renderPaymentSummary();
 		});
-		quantityInput.addEventListener('keydown', (event) => {
-			if (event.key === 'Enter') {
+		quantityInput.addEventListener("keydown", (event) => {
+			if (event.key === "Enter") {
 				handleUpdateQuantity(productId);
 				renderPaymentSummary();
 			}
 		});
 	});
 
-	document.querySelectorAll('.js-delivery-option').forEach((element) => {
-		element.addEventListener('click', () => {
+	document.querySelectorAll(".js-delivery-option").forEach((element) => {
+		element.addEventListener("click", () => {
 			const { productId, deliveryOptionId } = element.dataset;
 			cart.updateDeliveryOption(productId, deliveryOptionId);
 			renderOrderSummary();

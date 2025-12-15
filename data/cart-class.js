@@ -1,4 +1,4 @@
-import { validDeliveryOption } from './deliveryOptions.js';
+import { validDeliveryOption } from "./deliveryOptions.js";
 
 class Cart {
 	cartItems;
@@ -14,12 +14,12 @@ class Cart {
 			localStorage.getItem(this.#localStorageKey)
 		) || [
 			{
-				productId: 'e43638ce-6aa0-4b85-b27f-e1d07eb678c6',
+				productId: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
 				quantity: 2,
 				deliveryOptionId: `1`,
 			},
 			{
-				productId: '15b6fc6f-327a-4ec4-896f-486349e85a3d',
+				productId: "15b6fc6f-327a-4ec4-896f-486349e85a3d",
 				quantity: 1,
 				deliveryOptionId: `2`,
 			},
@@ -32,7 +32,7 @@ class Cart {
 		);
 	}
 	addToCart(productId, quantity) {
-		let matchingItem = '';
+		let matchingItem = "";
 		this.cartItems.forEach((cartItem) => {
 			if (cartItem.productId == productId) {
 				matchingItem = cartItem;
@@ -69,7 +69,7 @@ class Cart {
 		return cartQuantity;
 	}
 	updateQuantity(productId, newQuantity) {
-		let matchingItem = '';
+		let matchingItem = "";
 		this.cartItems.forEach((cartItem) => {
 			if (cartItem.productId == productId) {
 				matchingItem = cartItem;
@@ -79,7 +79,7 @@ class Cart {
 		this.saveToStorage();
 	}
 	updateDeliveryOption(productId, deliveryOptionId) {
-		let matchingItem = '';
+		let matchingItem = "";
 		this.cartItems.forEach((cartItem) => {
 			if (cartItem.productId == productId) {
 				matchingItem = cartItem;
@@ -94,6 +94,26 @@ class Cart {
 		matchingItem.deliveryOptionId = deliveryOptionId;
 		this.saveToStorage();
 	}
+
+	updateCartQuantityDisplay() {
+		const cartQuantity = this.calculateCartQuantity();
+		const cartQuantityElement = document.querySelector(".js-cart-quantity");
+		if (cartQuantityElement) {
+			cartQuantityElement.innerHTML = cartQuantity;
+		}
+	}
+
+	clearCart() {
+		this.cartItems = [];
+		this.saveToStorage();
+	}
 }
 
-export const cart = new Cart('amazonCart-oop');
+export const cart = new Cart("amazonCart-oop");
+
+export async function loadCartFetch() {
+	const response = await fetch("https://supersimplebackend.dev/cart");
+	const text = await response.text();
+	console.log(text);
+	return text;
+}
