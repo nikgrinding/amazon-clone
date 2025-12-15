@@ -32,6 +32,7 @@ describe("test suite: renderOrderSummary", () => {
         renderOrderSummary();
     });
 
+    // Integration Test: Verify that renderOrderSummary correctly displays cart items with product details, quantities, and prices in the DOM
     it("displays the cart", () => {
         expect(
             document.querySelectorAll(".js-cart-item-container").length
@@ -56,6 +57,7 @@ describe("test suite: renderOrderSummary", () => {
         ).toEqual(`$20.95`);
     });
 
+    // Integration Test: Verify that clicking the delete link removes the product from both the DOM and the cart
     it("removes a product", () => {
         document
             .querySelector(`.js-delete-quantity-link-${productId1}`)
@@ -80,6 +82,7 @@ describe("test suite: renderOrderSummary", () => {
         document.querySelector(".js-test-container").innerHTML = "";
     });
 
+    // Integration Test: Verify that changing delivery option updates the cart, UI state, and recalculates payment summary
     it("updates the delivery option", () => {
         document.querySelector(`.js-delivery-option-${productId1}-3`).click();
 
