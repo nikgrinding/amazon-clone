@@ -2,7 +2,8 @@ import { renderOrderSummary } from "./checkout/orderSummary.js";
 import { renderPaymentSummary } from "./checkout/paymentSummary.js";
 import { renderCheckoutHeader } from "./checkout/checkoutHeader.js";
 import { loadProductsFetch } from "../data/products.js";
-import { loadCartFetch } from "../data/cart-class.js";
+import { cart, loadCartFetch } from "../data/cart-class.js";
+import { renderEmptyState } from "./utils/emptyState.js";
 
 async function loadPage() {
     try {
@@ -10,6 +11,14 @@ async function loadPage() {
     } catch (error) {
         console.log(error);
     }
+
+    if (cart.cartItems.length === 0) {
+        renderEmptyState(".js-order-summary", "Your cart is empty");
+        document.querySelector(".js-payment-summary").innerHTML = "";
+        document.querySelector(".js-checkout-header").innerHTML = "";
+        return;
+    }
+
     renderCheckoutHeader();
     renderOrderSummary();
     renderPaymentSummary();

@@ -8,6 +8,7 @@ import {
 } from "../../data/deliveryOptions.js";
 import { renderPaymentSummary } from "./paymentSummary.js";
 import { renderCheckoutHeader } from "./checkoutHeader.js";
+import { renderEmptyState } from "../utils/emptyState.js";
 
 export function renderOrderSummary() {
     let cartSummaryHTML = "";
@@ -130,6 +131,14 @@ export function renderOrderSummary() {
         link.addEventListener("click", () => {
             const productId = link.dataset.productId;
             cart.removeFromCart(productId);
+
+            if (cart.cartItems.length === 0) {
+                renderEmptyState(".js-order-summary", "Your cart is empty");
+                document.querySelector(".js-payment-summary").innerHTML = "";
+                document.querySelector(".js-checkout-header").innerHTML = "";
+                return;
+            }
+
             renderCheckoutHeader();
             renderPaymentSummary();
             renderOrderSummary();

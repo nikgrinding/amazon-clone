@@ -3,9 +3,15 @@ import { getProduct, loadProductsFetch } from "../data/products.js";
 import { orders } from "../data/orders.js";
 import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js";
 import formatCurrency from "./utils/money.js";
+import { renderEmptyState } from "./utils/emptyState.js";
 
 async function loadPage() {
     await loadProductsFetch();
+
+    if (orders.length === 0) {
+        renderEmptyState(".js-orders-grid", "You haven't placed any orders yet");
+        return;
+    }
 
     let ordersHTML = "";
 
