@@ -2,7 +2,7 @@
 
 An e-commerce web application inspired by Amazon, built using **vanilla JavaScript, HTML, and CSS**. This project focuses on strengthening core JavaScript fundamentals by building a realistic shopping experience without relying on modern frameworks.
 
-**Live Demo:** _(link to be added once deployed)_
+**Live Demo:** _[Click here](https://simple-amazon-clone.vercel.app/)_
 
 ---
 
