@@ -1,7 +1,7 @@
 import { cart } from "../../data/cart-class.js";
 
 export function renderCheckoutHeader() {
-	const checkoutHTML = `
+    const checkoutHTML = `
         <div class="header-content">
             <div class="checkout-header-left-section">
                 <a href="amazon.html">
@@ -26,5 +26,5 @@ export function renderCheckoutHeader() {
             </div>
         </div>
     `;
-	document.querySelector(".js-checkout-header").innerHTML = checkoutHTML;
+    document.querySelector(".js-checkout-header").innerHTML = checkoutHTML;
 }
