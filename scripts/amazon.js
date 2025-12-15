@@ -1,5 +1,6 @@
 import { cart } from "../data/cart-class.js";
 import { products, loadProducts } from "../data/products.js";
+import "./utils/errorHandler.js";
 
 loadProducts(renderProductsGrid);
 
@@ -27,6 +28,15 @@ function renderProductsGrid() {
         });
     }
 
+    if (filteredProducts.length === 0) {
+        productsHTML = `
+            <div style="text-align: center; padding: 100px 20px; grid-column: 1 / -1;">
+                <h2>No products found</h2>
+                <p>Try a different search term</p>
+            </div>
+        `;
+    }
+
     filteredProducts.forEach((product) => {
         productsHTML += `
 		<div class="product-container">
@@ -34,6 +44,7 @@ function renderProductsGrid() {
 				<img
 					class="product-image"
 					src="${product.image}"
+					onerror="this.style.display='none'"
 				/>
 			</div>
 
@@ -115,16 +126,20 @@ function renderProductsGrid() {
     document
         .querySelector(".js-search-button")
         .addEventListener("click", () => {
-            const search = document.querySelector(".js-search-bar").value;
-            window.location.href = `index.html?search=${search}`;
+            const search = document.querySelector(".js-search-bar").value.trim();
+            if (search.length > 0 && search.length < 100) {
+                window.location.href = `index.html?search=${search}`;
+            }
         });
 
     document
         .querySelector(".js-search-bar")
         .addEventListener("keydown", (event) => {
             if (event.key === "Enter") {
-                const search = document.querySelector(".js-search-bar").value;
-                window.location.href = `index.html?search=${search}`;
+                const search = document.querySelector(".js-search-bar").value.trim();
+                if (search.length > 0 && search.length < 100) {
+                    window.location.href = `index.html?search=${search}`;
+                }
             }
         });
 }

@@ -25,7 +25,11 @@ export function getDeliveryOption(deliveryOptionId) {
             deliveryOption = option;
         }
     });
-    return deliveryOption || deliveryOptions[0];
+    if (!deliveryOption) {
+        console.warn(`Delivery option ${deliveryOptionId} not found, using default`);
+        return deliveryOptions[0];
+    }
+    return deliveryOption;
 }
 
 function isWeekend(date) {

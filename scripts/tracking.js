@@ -2,6 +2,7 @@ import { getOrder } from "../data/orders.js";
 import { getProduct, loadProductsFetch } from "../data/products.js";
 import { cart } from "../data/cart-class.js";
 import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js";
+import "./utils/errorHandler.js";
 
 async function loadPage() {
     await loadProductsFetch();
@@ -13,12 +14,40 @@ async function loadPage() {
     const order = getOrder(orderId);
     const product = getProduct(productId);
 
+    if (!order || !product) {
+        document.querySelector(".js-order-tracking").innerHTML = `
+            <div style="text-align: center; padding: 100px 20px;">
+                <h2>Order not found</h2>
+                <a href="orders.html">
+                    <button class="button-primary" style="margin-top: 20px; padding: 10px 30px;">
+                        View Orders
+                    </button>
+                </a>
+            </div>
+        `;
+        return;
+    }
+
     let productDetails;
     order.products.forEach((details) => {
         if (details.productId === product.id) {
             productDetails = details;
         }
     });
+
+    if (!productDetails) {
+        document.querySelector(".js-order-tracking").innerHTML = `
+            <div style="text-align: center; padding: 100px 20px;">
+                <h2>Product not found in order</h2>
+                <a href="orders.html">
+                    <button class="button-primary" style="margin-top: 20px; padding: 10px 30px;">
+                        View Orders
+                    </button>
+                </a>
+            </div>
+        `;
+        return;
+    }
 
     const today = dayjs();
     const orderTime = dayjs(order.orderTime);
@@ -47,7 +76,7 @@ async function loadPage() {
             Quantity: ${productDetails.quantity}
         </div>
 
-        <img class="product-image" src="${product.image}">
+        <img class="product-image" src="${product.image}" onerror="this.style.display='none'">
 
         <div class="progress-labels-container">
             <div class="progress-label ${

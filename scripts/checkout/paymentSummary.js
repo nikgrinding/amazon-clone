@@ -10,6 +10,9 @@ export function renderPaymentSummary() {
     let cartQuantity = 0;
     cart.cartItems.forEach((cartItem) => {
         const product = getProduct(cartItem.productId);
+        if (!product) {
+            return;
+        }
         productPriceCents += product.priceCents * cartItem.quantity;
         const deliveryOption = getDeliveryOption(cartItem.deliveryOptionId);
         shippingPriceCents += deliveryOption.priceCents;
@@ -68,6 +71,13 @@ export function renderPaymentSummary() {
     document
         .querySelector(".js-place-order-button")
         .addEventListener("click", async () => {
+            const button = document.querySelector(".js-place-order-button");
+            button.disabled = true;
+            if (!navigator.onLine) {
+                button.disabled = false;
+                alert("No internet connection. Please check your network.");
+                return;
+            }
             try {
                 const response = await fetch(
                     "https://supersimplebackend.dev/orders",
@@ -77,12 +87,16 @@ export function renderPaymentSummary() {
                         body: JSON.stringify({ cart: cart.cartItems }),
                     }
                 );
+                if (!response.ok) {
+                    throw new Error("Failed to place order");
+                }
                 const order = await response.json();
                 addOrder(order);
                 cart.clearCart();
+                window.location.href = "orders.html";
             } catch (error) {
-                console.log(error);
+                button.disabled = false;
+                alert("Failed to place order. Please try again.");
             }
-            window.location.href = "orders.html";
         });
 }

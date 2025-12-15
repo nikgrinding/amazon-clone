@@ -18,6 +18,10 @@ export function renderOrderSummary() {
 
         const matchingProduct = getProduct(productId);
 
+        if (!matchingProduct) {
+            return;
+        }
+
         const deliveryOptionId = cartItem.deliveryOptionId;
         const deliveryOption = getDeliveryOption(deliveryOptionId);
 
@@ -33,7 +37,8 @@ export function renderOrderSummary() {
             <div class="cart-item-details-grid">
                 <img
                     class="product-image"
-                    src=${matchingProduct.image}
+                    src="${matchingProduct.image}"
+                    onerror="this.style.display='none'"
                 />
     
                 <div class="cart-item-details">
@@ -125,7 +130,10 @@ export function renderOrderSummary() {
         return html;
     }
 
-    document.querySelector(".js-order-summary").innerHTML = cartSummaryHTML;
+    const orderSummaryElement = document.querySelector(".js-order-summary");
+    if (orderSummaryElement) {
+        orderSummaryElement.innerHTML = cartSummaryHTML;
+    }
 
     document.querySelectorAll(".js-delete-quantity-link").forEach((link) => {
         link.addEventListener("click", () => {
@@ -158,8 +166,8 @@ export function renderOrderSummary() {
         const quantity = Number(
             document.querySelector(`.js-quantity-input-${productId}`).value
         );
-        if (quantity <= 0 || quantity >= 1000) {
-            alert("Quantity must be at least 1 and less than 1000");
+        if (isNaN(quantity) || quantity <= 0 || quantity >= 1000 || !Number.isInteger(quantity)) {
+            alert("Quantity must be a whole number between 1 and 999");
             return;
         }
         cart.updateQuantity(productId, quantity);

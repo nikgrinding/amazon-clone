@@ -4,12 +4,13 @@ import { renderCheckoutHeader } from "./checkout/checkoutHeader.js";
 import { loadProductsFetch } from "../data/products.js";
 import { cart, loadCartFetch } from "../data/cart-class.js";
 import { renderEmptyState } from "./utils/emptyState.js";
+import "./utils/errorHandler.js";
 
 async function loadPage() {
     try {
         await Promise.all([loadProductsFetch(), loadCartFetch()]);
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 
     if (cart.cartItems.length === 0) {

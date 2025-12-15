@@ -4,6 +4,7 @@ import { orders } from "../data/orders.js";
 import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js";
 import formatCurrency from "./utils/money.js";
 import { renderEmptyState } from "./utils/emptyState.js";
+import "./utils/errorHandler.js";
 
 async function loadPage() {
     await loadProductsFetch();
@@ -51,9 +52,13 @@ async function loadPage() {
         order.products.forEach((productDetails) => {
             const product = getProduct(productDetails.productId);
 
+            if (!product) {
+                return;
+            }
+
             productsListHTML += `
 				<div class="product-image-container">
-				<img src="${product.image}">
+				<img src="${product.image}" onerror="this.style.display='none'">
 				</div>
 
 				<div class="product-details">

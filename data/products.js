@@ -67,8 +67,14 @@ export class Appliance extends Product {
 export let products = [];
 
 export function loadProductsFetch() {
+    if (!navigator.onLine) {
+        return Promise.reject(new Error("No internet connection"));
+    }
     const promise = fetch("https://supersimplebackend.dev/products")
         .then((response) => {
+            if (!response.ok) {
+                throw new Error("Failed to load products");
+            }
             return response.json();
         })
         .then((productsData) => {
@@ -82,7 +88,8 @@ export function loadProductsFetch() {
             });
         })
         .catch((error) => {
-            console.log(error);
+            console.error("Failed to load products:", error);
+            alert("Failed to load products. Please refresh the page.");
         });
     return promise;
 }
@@ -101,7 +108,7 @@ export function loadProducts(fun) {
         fun();
     });
     xhr.addEventListener("error", (error) => {
-        console.log(error);
+        console.error(error);
     });
     xhr.open("GET", "https://supersimplebackend.dev/products");
     xhr.send();
