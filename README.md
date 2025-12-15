@@ -68,7 +68,7 @@ git clone https://github.com/yourusername/amazon-clone.git
 cd amazon-clone
 ```
 
-Open `amazon.html` in any modern web browser. No build tools or dependencies are required.
+Open `index.html` in any modern web browser. No build tools or dependencies are required.
 
 ---
 
